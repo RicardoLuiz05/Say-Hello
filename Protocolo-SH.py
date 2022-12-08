@@ -3,6 +3,7 @@ from arvore import ArvoreBinaria
 import getpass
 ABB = ArvoreBinaria()
 
+# Parte do cliente
 HOST = ''  # Endereco IP do Servidor
 PORT = 5000  # Porta que o Servidor está
 udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -11,7 +12,7 @@ dest = (HOST, PORT)
 def login(tokens):
     # usuario = tokens[1]
     # senha = tokens[2
-  pass
+    pass
 
 def join(tokens, ABB):
     sala = tokens[1]
@@ -45,15 +46,15 @@ while True:
         # login = login(tokens)
       
     elif command == "JOIN":
-       if join(tokens, ABB):
-         print('Você entrou na sala')
-       else:
-         print(f'Sinto muito, meu nobre. Mas a sala "{tokens[1]}" não existe!')
-         #Parametro pela metade
+        if join(tokens, ABB):
+            print(f'Você entrou na sala "{tokens[1]}"')
+        else:
+            print(f'Sinto muito, meu nobre. Mas a sala "{tokens[1]}" não existe!')
+            #Parametro pela metade
       
     elif command == "CREATE":
-      if create(tokens, ABB):
-        print(f'Sala "{tokens[1]}" criada com sucesso!')
+        if create(tokens, ABB):
+            print(f'Sala "{tokens[1]}" criada com sucesso!')
       
       
     elif command == "DELETE":
@@ -69,7 +70,7 @@ while True:
         
       
     elif command == "QUIT":
-        print('Até mais </3')
+        print('Até mais')
         break
       
     else:
