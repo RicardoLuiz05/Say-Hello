@@ -1,0 +1,17 @@
+para usar uma variavel global tem que usar de tal forma: globals.NomeDaVariavel
+e tem que importar a pasta globals na pasta em que for ser utilizada
+pra criar uma global tenm que usar global e o nome da variavel
+
+pasta para variavel global
+create:
+pasta = [valor do nó 3, 5, 6, 7 ,8]
+
+join:
+  pegar o valor do nó, comparar com o valor da pasta e depois subtrair
+  a variável global
+  if variável = limite:
+   não entra
+
+leave or quit:
+  usuário saiu:
+    variável + 1

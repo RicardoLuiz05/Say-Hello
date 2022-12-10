@@ -1,4 +1,5 @@
 import socket
+from protocolo import login
 
 HOST = ''  # Endereco IP do Servidor
 PORT = 5000  # Porta que o Servidor está

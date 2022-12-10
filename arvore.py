@@ -55,21 +55,22 @@ class ArvoreBinaria:
         self.__posordem(no.dir)
         print(f'{no.carga}', end=' ')
 
-    def add(self, carga:any):
-        if(self.__raiz == None):
+    def creator(self, carga:any):
+        if (self.__raiz == None):
             self.__raiz = No(carga)
+            print(No(carga))
         else:
-            self.__add(carga,self.__raiz)
+            self.__creator(carga,self.__raiz)
 
-    def __add(self, carga:any, node:'No'):
+    def __creator(self, carga:any, node:'No'):
         if ( carga < node.carga):
             if( node.esq != None):
-                self.__add(carga, node.esq)
+                self.__creator(carga, node.esq)
             else:
                 node.esq = No(carga)
         else:
             if( node.dir != None):
-                self.__add(carga, node.dir)
+                self.__creator(carga, node.dir)
             else:
                 node.dir = No(carga)
 
@@ -112,7 +113,7 @@ class ArvoreBinaria:
                 self.__raiz = self.__raiz.esq
                 return self.__raiz.carga             
         retorno = self.__removeNo(self.__raiz, chave)
-        return retorno.carga
+        return retorno.carga 
     
     # Dado um nó de uma BST e uma chave busca, este método
     # deleta o nó que contém a chave e devolve o novo nó raiz
