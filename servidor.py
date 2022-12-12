@@ -2,7 +2,7 @@ import socket
 # from protocolo import login
 # from protocolo import mensagem
 
-HOST = ''  # Endereco IP do Servidor
+HOST = '10.0.4.73'  # Endereco IP do Servidor
 PORT = 5000  # Porta que o Servidor está
 udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 orig = (HOST, PORT)
