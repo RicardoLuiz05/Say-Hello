@@ -1,198 +1,142 @@
+from lista import Lista
+
 class No:
-    def __init__(self,carga:any):
-        self.carga = carga
-        self.esq = None
-        self.dir = None
+    def __init__(self, nome):
+        self.__id = hash(nome)
+        self.__nome = nome
+        self.__esq = None
+        self.__dir = None
+
+    @property
+    def id(self) -> int:
+        return self.__id
+
+    @property
+    def nome(self) -> str:
+        return self.__nome
+
+    @property
+    def esq(self):
+        return self.__esq
+
+    @property
+    def dir(self):
+        return self.__dir
+
+    @id.setter
+    def id(self, novo_id:int):
+        self.__id = novo_id
+
+    @nome.setter
+    def nome(self, novo_nome:str):
+        self.__nome = novo_nome
+
+    @esq.setter
+    def esq(self, nova_esq):
+        self.__esq = nova_esq
+
+    @dir.setter
+    def dir(self, nova_dir):
+        self.__dir = nova_dir
 
     def __str__(self):
-        return str(self.carga)
+        return f'{self.nome}'
 
- 
-class ArvoreBinaria:        
-    def __init__(self, carga_da_raiz:any = None):
-        self.__raiz = No(carga_da_raiz) if carga_da_raiz != None else carga_da_raiz
 
-    def criarRaiz(self, carga_da_raiz:any):
-        if self.__raiz is None:
-            self.__raiz = No(carga_da_raiz)
+class ABB:
+    def __init__(self, raiz=None):
+        if raiz is None:
+            self.__raiz = None
+        else:
+            self.__raiz = self.inserir_dado(raiz)
 
-    def estaVazia(self)->bool:
+    @property
+    def raiz(self) -> object:
+        return self.__raiz
+
+    def esta_vazia(self) -> bool:
         return self.__raiz == None
-        
-    def getRaiz(self)->any:
-        if self.__raiz is not None:
-            return self.__raiz.carga
+
+    def inserir(self, nome):
+        if self.esta_vazia():
+            self.__raiz = No(nome)
         else:
-            return None
+            self.__inserir(nome, self.raiz)
 
-    def preordem(self):
-        self.__preordem(self.__raiz)
-
-    def __preordem(self, no):
-        if no is None:
-            return
-        print(f'{no.carga}', end=' ')
-        self.__preordem(no.esq)
-        self.__preordem(no.dir)
-
-    def emordem(self):
-        self.__emordem(self.__raiz)
-
-    def __emordem(self, no):
-        if no is None:
-            return
-        self.__emordem(no.esq)
-        print(f'{no.carga}', end=' ')
-        self.__emordem(no.dir)
-
-    def posordem(self):
-        self.__posordem(self.__raiz)
-
-    def __posordem(self, no):
-        if no is None:
-            return
-        self.__posordem(no.esq)
-        self.__posordem(no.dir)
-        print(f'{no.carga}', end=' ')
-
-    def creator(self, carga:any):
-        if (self.__raiz == None):
-            self.__raiz = No(carga)
-            print(No(carga))
-        else:
-            self.__creator(carga,self.__raiz)
-
-    def __creator(self, carga:any, node:'No'):
-        if ( carga < node.carga):
-            if( node.esq != None):
-                self.__creator(carga, node.esq)
+    def __inserir(self, nome, no):
+        id = hash(nome)
+        if id < no.id:
+            if no.esq != None:
+                self.__inserir(nome, no.esq)
             else:
-                node.esq = No(carga)
+                no.esq = No(nome)
         else:
-            if( node.dir != None):
-                self.__creator(carga, node.dir)
+            if no.dir != None:
+                self.__inserir(nome, no.dir)
             else:
-                node.dir = No(carga)
+                no.dir = No(nome)
 
-    def __count(self, no:No)->int:        
-        if no is None:
-            return 0
-        return 1 + self.__count(no.esq)+self.__count(no.dir)
-        
+    def busca(self, id: int) -> any:
+        return self.__busca(id, self.__raiz)
 
-    def __len__(self):
-        return self.__count(self.__raiz)
-
-    def busca(self, chave:any ):
-        return self.__busca(chave, self.__raiz)
-    
-    def __busca(self, chave, no:No):
+    def __busca(self, id, no: No) -> any:
         if no is None:
             return False
-        if ( chave == no.carga):
+        if (id == no.id):
             return True
-        elif ( chave < no.carga and no.esq != None):
-            return self.__busca( chave, no.esq)
-        elif ( chave > no.carga and no.dir != None):
-            return self.__busca( chave, no.dir)
+        elif (id < no.id and no.esq != None):
+            return self.__busca(id, no.esq)
+        elif (id > no.id and no.dir != None):
+            return self.__busca(id, no.dir)
         else:
             return False
 
+    def buscaList(self, id: int) -> any:
+        return self.__buscaList(id, self.__raiz)
+                                             
+    def __buscaList(self, id, no: No) -> any:
+        if no is None:
+            return False
+        if (id == no.id):
+            return no.lista
+        elif (id < no.id and no.esq != None):
+            return self.__buscaList(id, no.esq)
+        elif (id > no.id and no.dir != None):
+            return self.__buscaList(id, no.dir)
+        else:
+            return False
 
-    def removeNo(self, chave:any)->any:
+    def remover(self, id):
         if self.__raiz is None:
             return None
-        if chave == self.__raiz.carga:
+        if id == self.__raiz.id:
             if self.__raiz.esq is None and self.__raiz.dir is None:
                 self.__raiz = None
                 return None
             if self.__raiz.esq is None : 
                 self.__raiz = self.__raiz.dir  
-                return self.__raiz.carga
+                return self.__raiz.id
             elif self.__raiz.dir is None:
                 self.__raiz = self.__raiz.esq
-                return self.__raiz.carga             
-        retorno = self.__removeNo(self.__raiz, chave)
-        return retorno.carga 
-    
-    # Dado um nó de uma BST e uma chave busca, este método
-    # deleta o nó que contém a chave e devolve o novo nó raiz
-    def __removeNo(self,node, chave):
-        # Caso primário: não há raiz
-        if node is None: 
+                return self.__raiz.id
+        retorno = self.__remover(self.__raiz, id)
+        return retorno.id
+
+    def __remover(self, no, id):
+        if no is None: 
             return None
-  
-        # Se a chave a ser deletada é menor do que a chave do nó raiz (da vez),
-        # então a chave se encontra na subárvore esquerda
-        if chave < node.carga:
-            node.esq = self.__removeNo(node.esq,chave) 
-  
-        # Se a chave a ser deletada é maior do que a chave do nó raiz (da vez),
-        # então a chave se encontra na subárvore esquerda
-        elif(chave > node.carga):
-            node.dir = self.__removeNo(node.dir, chave) 
-  
-        # Se a chave é igual à chave do nó raiz, então este é o nó 
-        # a ser removido
-        else:
-            # (1) Nó com apenas 1 filho ou nenhum filho
-            if node.esq is None : 
-                temp = node.dir  
-                node = None 
-                return temp
-
-            elif node.dir is None :
-                temp = node.esq
-                node = None
-                return temp 
-  
-            # (2) Nó com dois filhos: obtem o sucessor inorder
-            # (o menor nó da subárvore direita) 
-            temp = self.__minValueNode(node.dir) 
-  
-            # copia o conteúdo do sucessor inorder para este nós
-            node.carga = temp.carga
-  
-            # Deletao sucessor inorder
-            node.dir = self.__removeNo(node.dir , temp.carga)
-
-        return node
-
-
-    def __minValueNode(self, node:'No'):
-        current = node 
-        # loop para baixo a fim de encontrar a folha mais a esquerda
-        while(current.esq is not None): 
-            current = current.esq  
-
-        return current
-
-    def __maxValueNode(self, node:'No'):
-        current = node 
-        # loop para baixo a fim de encontrar a folha mais a direita
-        while(current.dir is not None): 
-            current = current.dir  
-
-        return current
+        if id < no.id:
+            no.esq = self.__remover(no.esq, id) 
+        elif(id > no.id):
+            no.dir = self.__remover(no.dir, id) 
         
-    
-    def __go(self, chave:int, no:No)->No:
-        if no is None:
-            return None
-        if no.carga == chave:
-            return no
-        resultado = self.__go(chave, no.esq)
-        if ( resultado ):
-            return resultado
-        else:
-            return self.__go(chave, no.dir)
+    def preordem(self):
+        return self.__preordem(self.__raiz)
 
-
-    def  removeRaiz(self)->bool:
-        '''Só remove a raiz se a árvore tiver apenas a raiz'''
-        if (len(self) == 1):
-            self.__raiz = self.__cursor = None
-            return True
-        else:
-            return False
-
+    def __preordem(self, no):
+        res = []
+        if no:
+            res.append(no.nome)
+            res = res + self.__preordem(no.esq)
+            res = res + self.__preordem(no.dir)
+        return res

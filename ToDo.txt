@@ -1,0 +1,10 @@
+• refazer a lista                                          feito
+• lista das pessoas no servidor em geral                +- feito (falta threads pra ver se realmente tá pegando)
+• fazer um if pra ver se são tem user igual             +- feito (falta threads pra ver se realmente tá pegando)
+• lista das pessoas em cada chat                        +- feito (ainda não testei)
+• ajeitar o input da lista no create                    +- feito (ainda não testei)
+• fazer os chats em si                                     começei a fazer
+• ajeitar o leave junto com os chats 
+• mudar a cor dos prints que não são mensagens no chat     feito
+• threads no while True do servidor
+• botar uns try except pra dizer que tem                +- feito (botei um kkk)

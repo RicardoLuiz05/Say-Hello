@@ -1,3 +1,0 @@
-#variáveis globais
-
-global limPeople
