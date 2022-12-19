@@ -1,5 +1,3 @@
-from lista import Lista
-
 class No:
     def __init__(self, nome):
         self.__id = hash(nome)
