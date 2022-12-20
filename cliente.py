@@ -5,7 +5,7 @@ from style import style
 #from main import protocolo
 
 HOST = 'localhost'
-PORT = 1500
+PORT = 5100
 cliente = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 dest = (HOST, PORT)
 
