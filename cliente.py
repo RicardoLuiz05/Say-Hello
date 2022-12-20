@@ -1,93 +1,122 @@
 import socket
-# from fila import Fila
-from arvore import ABB
-arvore = ABB()
+import threading
+from threading import Thread, Semaphore
+from style import style
+#from main import protocolo
 
 HOST = 'localhost'
 PORT = 1500
-udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+cliente = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 dest = (HOST, PORT)
 
-print("\n--- Bem-vindo ao Say Hello ---\n")
+print("\n--- Bem-vindo ao Say Hello! ---\n")
 
-username = input('Username: ')
-while len(username) < 1:
-    print('Digite um username\n')
-    username = input('Username: ')
+def connect():
+    try:
+        cliente.connect(dest)
+        print(f'{style.GREEN}• Conectado\n{style.RESET}')
+    except:
+        print(f'{style.RED}• Não foi possiível conectar-se{style.RESET}\n')
+    username = 'username '
+    username += input('username: ')
+    while len(username) == 'username ':
+        print(f'{style.RED}Digite um username{style.RESET}\n')
+        username += input('username: ')
+    cliente.sendall(username.encode())
 
-blockMutex = 0
+    # msg = cliente.recv(2048).decode()
+    # print(msg)
 
-while True:
+    # threading.Thread(target=msg_servidor, args=(cliente, )).start()
+     
+
+def entrada():
+    while True:
+        entrada = input('\nSH >>> ')
+        cliente.sendall(entrada.encode())
+        codigo, servidor = cliente.recvfrom(2048)
+        print(codigo.decode())
+
+
+def msg_servidor(cliente):
+    while True:
+        msg = cliente.recv(2048).decode()
+        if msg != '':
+            username = msg.split("->")[0]
+            print(msg.split('->'))
+            content = msg.split("->")[1]
+        print(f"[{username}] {content}")
+
+connect()
+entrada()
+
+# Receber = threading.Thread(target=, args=())
+# Enviar = threading.Thread(target=, args=())
+# while True:
     
-    entrada = input("\nSH >>> ")
-    enter_user = f'{entrada}+{username}'
-    udp.sendto(enter_user.encode(), dest)
-    entrada = entrada.split()
-    comando = entrada[0].upper()
-  
-    if comando == "CREATE":
-        codigo_create, servidor = udp.recvfrom(2048)
-        print(codigo_create.decode())
-      
-    elif comando == "DELETE":
-        codigo_create, servidor = udp.recvfrom(2048)
-        print(codigo_create.decode())
-      
-    elif comando == "JOIN":
-        sala = ''
-        for i in entrada[1:]:
-            sala += f'{i} ' 
-        if arvore.busca(hash(sala)):
-            print('\n200 +OK')
-            id_sala = hash(sala)
-            blockMutex = 1
-        else:
-            print('\n400 -ERR chat não existente')
+#     entrada = input("\nSH >>> ")
+#     entrada_split = entrada.split()
+#     comando = entrada_split[0].upper()
+#     parametro = ''
+#     for i in entrada_split[1:]:
+#         parametro += f'{i} '
+#     enter_user = f'{entrada}+{username}'
+#     cliente.sendto(enter_user.encode(), dest)
 
-    elif comando == "LEAVE":
-        if len(entrada) != 1:
-            print('\n400 -ERR este método não recebe parâmetros')
-            continue
-        if blockMutex == 1:
-            id_sala = None
-            blockMutex = 0
-            print('\n200 +OK')
-        else:
-            print('\n400 -ERR você não está em nenhum chat')
+#     # protocolo(username, cliente)
+
+#     if comando == "CREATE":
+#         codigo, servidor = cliente.recvfrom(2048)
+#         print(codigo.decode())
       
-    elif comando == "MSG":
-        msg = ''
-        for i in entrada[1:]:
-            msg += f'{i} '
-        udp.sendto(msg.encode(), dest)
-
-    elif comando == 'CHATS':
-        if len(entrada) != 1:
-            print('\n400 -ERR este método não recebe parâmetros')
-            continue
-        if arvore.raiz == None:
-            print('\n400 -ERR servidor ainda não possui chats')
-            continue
-        print()
-        print('200 +OK\n')
-        arvore.preordem()
+#     elif comando == "DELETE":
+#         codigo, servidor = cliente.recvfrom(2048)
+#         print(codigo.decode())
       
-    elif comando == "QUIT":
-        if blockMutex == 0:
-            break
-        else:
-            print('\,400 -ERR você só pode usar esse comando quando sair do chat')
+#     elif comando == "JOIN":
+#         codigo, servidor = cliente.recvfrom(2048)
+#         if codigo.decode() == '200 +OK':
+#             while True:
+#                 msg = input()
+#                 msg = msg.encode
+#                 cliente.send(msg)
+      
+#     elif comando == "LEAVE":
+#         if len(entrada) != 1:
+#             print('\n400 -ERR este método não recebe parâmetros!')
+#             continue
+#             id_sala = None
+#             print('\n200 +OK')
 
-    else:
-        print(f'''\nDigite um comando válido.
-{'='*30}
-CREATE → criar um chat
-DELETE → deletar um chat
-JOIN → entrar em um chat
-LEAVE → sair de um chat
-MSG → mandar mensagem no chat
-CHATS → imprime a árvore de chats
-MEMBERS → imprime a fila de pessoas em cada chat
-QUIT → encerrar conexão''')
+#     elif comando == 'CHATS':
+#         out, servidor = cliente.recvfrom(2048)
+#         out = out.decode().split('!')
+#         if out[0] == '\n400 -ERR este método não recebe parâmetros!' or out[0] == '\n400 -ERR servidor ainda não possui chats!':
+#             print(f'\n{out[0]}')
+#         else:
+#             print(f'\n{out[0]}')
+#             print(out[1])
 
-print("\n--- Obrigado por ter usado Say Hello ---\n")
+#     # elif comando == "MEMBERS":
+#     #     if blockMutex == 0:
+#     #         codigo, servidor = cliente.recvfrom(2048)
+#     #         print(codigo.decode())
+
+#     #     else:
+#     #         print('\n400 -ERR você deve estar em um chat para usar este parâmetro!')
+      
+#     elif comando == "QUIT":
+#         break
+
+#     else:
+#         print(f'''\nDigite um comando válido.
+# {'='*30}
+# CREATE → criar um chat
+# DELETE → deletar um chat
+# JOIN → entrar em um chat
+# LEAVE → sair de um chat
+# CHATS → imprime a árvore de chats
+# MEMBERS → imprime a lista de pessoas em cada chat
+# QUIT → encerra a conexão''')
+
+# print("\n--- Obrigado por ter usado Say Hello! ---\n")
